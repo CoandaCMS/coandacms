@@ -8,4 +8,4 @@ I've worked with many different CMS platforms over the last decade or so and fee
 
 Over the next few weeks I hope to get the basics in place.
 
-Tweet me if you like [@alexdover](http://alexdover.co.uk).
+Tweet me if you like [@alexdover](http://twitter.com/alexdover).
