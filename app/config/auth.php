@@ -28,7 +28,7 @@ return array(
 	|
 	*/
 
-	'model' => 'CoandaCMS\Coanda\Models\User',
+	'model' => 'CoandaCMS\Coanda\Authentication\Eloquent\Models\User',
 
 	/*
 	|--------------------------------------------------------------------------
