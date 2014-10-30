@@ -1,7 +1,6 @@
 ## Coanda CMS
 
-[![Packagist Version](http://img.shields.io/packagist/v/CoandaCMS/coanda-core.svg)](https://packagist.org/packages/coandacms/coandacms)
-[![Licence](http://img.shields.io/packagist/l/CoandaCMS/coanda-core.svg)](https://packagist.org/packages/coandacms/coandacms)
+[![Latest Stable Version](https://poser.pugx.org/coandacms/coanda-core/v/stable.svg)](https://packagist.org/packages/coandacms/coanda-core) [![Total Downloads](https://poser.pugx.org/coandacms/coanda-core/downloads.svg)](https://packagist.org/packages/coandacms/coanda-core) [![Latest Unstable Version](https://poser.pugx.org/coandacms/coanda-core/v/unstable.svg)](https://packagist.org/packages/coandacms/coanda-core) [![License](https://poser.pugx.org/coandacms/coanda-core/license.svg)](https://packagist.org/packages/coandacms/coanda-core)
 
 Coanda CMS is a full featured content management system based on the Laravel PHP framework.
 
