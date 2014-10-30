@@ -14,7 +14,13 @@ End users will love Coanda CMS for its easy to use admin area, multiple publish 
 
 Coanda CMS can be installed by either cloning this starter system or adding the core package [CoandaCMS/coanda-core](https://github.com/CoandaCMS/coanda-core) to an existing Laravel application.
 
-Once you have cloned this start system, simple run the following commands:
+Once you have cloned this start system you first need to use composer to install the dependencies. For more information on how to install composer visit [https://getcomposer.org/](https://getcomposer.org/)
+
+    composer install
+    
+Next, you will need to create a database and change your environment database settings in `app/database.php` or `app/your-env/database.php`
+    
+Once you have yoru database settings in place, then you will just need to the run the migrations for Coanda CMS and the setup command to add your first user and group
 
     php artisan migrate --package="coandacms/coanda-core"
     php artisan coanda:setup
