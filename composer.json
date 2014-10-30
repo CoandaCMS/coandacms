@@ -4,8 +4,7 @@
 	"keywords": ["laravel", "cms"],
 	"license": "MIT",
 	"require": {
-		"coandacms/coanda-core": "dev-master",
-		"laravel/framework": "4.1.*"
+		"coandacms/coanda-core": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
@@ -15,7 +14,7 @@
 			"app/tests/TestCase.php"
 		],
         "psr-4": {
-            "MySite\\": "app/mysite"
+            "MySite\\": "MySite"
         }
 	},
 	"scripts": {

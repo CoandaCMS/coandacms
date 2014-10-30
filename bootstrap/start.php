@@ -24,11 +24,14 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(function () {
 
-	'local' => array('your-machine-name'),
+    if (isset($_SERVER['APP_ENVIRONMENT']))
+    {
+        return $_SERVER['APP_ENVIRONMENT'];
+    }
 
-));
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +57,8 @@ $app->bindInstallPaths(require __DIR__.'/paths.php');
 |
 */
 
-$framework = $app['path.base'].'/vendor/laravel/framework/src';
+$framework = $app['path.base'].
+                 '/vendor/laravel/framework/src';
 
 require $framework.'/Illuminate/Foundation/start.php';
 

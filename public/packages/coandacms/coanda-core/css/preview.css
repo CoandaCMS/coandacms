@@ -1,0 +1,46 @@
+body,
+html
+{
+	height: 100%;
+}
+
+#overlay
+{
+	position: absolute;
+	width: 100%;
+	background: #000;
+	color: #fff;
+}
+
+#preview
+{
+	border: none;
+	width: 100%;
+	height: 100%;
+}
+
+#overlay-comment-form
+{
+	position: absolute;
+	display: none;
+	background: #000;
+	width: 50%;
+	padding: 5px;
+	right: 0;
+}
+
+#overlay-comment-form.visible
+{
+	display: block;
+}
+
+.preview-text
+{
+	padding: 10px;
+	font-size: 14px;
+}
+
+#add-comment-button
+{
+	margin: 5px;
+}
