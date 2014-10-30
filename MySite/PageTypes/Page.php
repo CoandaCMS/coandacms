@@ -2,21 +2,33 @@
 
 class Page extends \CoandaCMS\Coanda\Pages\PageType {
 
+    /**
+     * @return string
+     */
     public function identifier()
     {
         return 'page';
     }
 
+    /**
+     * @return string
+     */
     public function name()
     {
         return 'Page';
     }
 
+    /**
+     * @return string
+     */
     public function icon()
     {
         return 'fa-file-text';
     }
 
+    /**
+     * @return array
+     */
     public function attributes()
     {
         return [
@@ -55,6 +67,10 @@ class Page extends \CoandaCMS\Coanda\Pages\PageType {
         ];
     }
 
+    /**
+     * @param $version
+     * @return mixed
+     */
     public function generateName($version)
     {
         $short_name = $version->getAttributeByIdentifier('name')->typeData();
@@ -67,11 +83,17 @@ class Page extends \CoandaCMS\Coanda\Pages\PageType {
         return $version->getAttributeByIdentifier('name')->typeData();
     }
 
+    /**
+     * @return bool
+     */
     public function canStaticCache()
     {
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function availableTemplates()
     {
         return [
