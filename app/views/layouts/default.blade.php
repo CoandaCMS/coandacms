@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ $meta['title'] }} | Abellio Greater Anglia</title>
+    <title>{{ $meta['title'] }}</title>
     @if ($meta['description'] != '')
         <meta name="description" content="{{ $meta['description'] }}">
     @endif
