@@ -73,7 +73,7 @@ class Page extends \CoandaCMS\Coanda\Pages\PageType {
      */
     public function generateName($version)
     {
-        $short_name = $version->getAttributeByIdentifier('name')->typeData();
+        $short_name = $version->getAttributeByIdentifier('short_name')->typeData();
 
         if ($short_name !== '')
         {
