@@ -2831,12 +2831,21 @@
          * @param {jQuery} $editable
          * @param {String} sUrl
          */
-        this.insertImage = function ($editable, sUrl, filename) {
+        this.insertImage = function ($editable, sUrl, filename, attributes) {
+
+            var img_attributes = attributes || [];
+
             async.createImage(sUrl, filename).then(function ($image) {
                 $image.css({
                     display: '',
                     width: Math.min($editable.width(), $image.width())
                 });
+
+                for (var attr_key in img_attributes)
+                {
+                    $image.attr(attr_key, img_attributes[attr_key]);
+                }
+
                 range.create().insertNode($image[0]);
                 afterCommand($editable);
             }).fail(function () {
@@ -3092,6 +3101,12 @@
          */
         this.floatMe = function ($editable, value, $target) {
             $target.css('float', value);
+
+            $target.removeClass (function (index, css) {
+                return (css.match (/\bfloat-\S+/g) || []).join(' ');
+            });
+
+            $target.addClass('float-' + value);
             afterCommand($editable);
         };
 
@@ -3590,8 +3605,6 @@
                 var $imageInput = $dialog.find('.note-medialibrary-image-input');
                 var $mediaLibraryDialog = $dialog.find('.note-medialibrary-dialog');
 
-                console.log($mediaLibraryDialog.size());
-
                 var $buildPaginatorDots = function () {
 
                     var page_li = $('<li />');
@@ -4036,7 +4049,7 @@
                 dialog.showMediaLibraryDialog($editable, $dialog).then(function (data, attributes) {
                     if (typeof data === 'string') {
                         editor.restoreRange($editable);
-                        editor.insertImage($editable, data, attributes);
+                        editor.insertImage($editable, data, '', attributes);
                     } else {
                         insertImages($editable, data);
                     }
@@ -4645,20 +4658,20 @@
             var hide = options.hide;
 
             return '<button type="button"' +
-            ' class="btn btn-default btn-sm btn-small' +
-            (className ? ' ' + className : '') +
-            (dropdown ? ' dropdown-toggle' : '') +
-            '"' +
-            (dropdown ? ' data-toggle="dropdown"' : '') +
-            (title ? ' title="' + title + '"' : '') +
-            (event ? ' data-event="' + event + '"' : '') +
-            (value ? ' data-value=\'' + value + '\'' : '') +
-            (hide ? ' data-hide=\'' + hide + '\'' : '') +
-            ' tabindex="-1">' +
-            label +
-            (dropdown ? ' <span class="caret"></span>' : '') +
-            '</button>' +
-            (dropdown || '');
+                ' class="btn btn-default btn-sm btn-small' +
+                (className ? ' ' + className : '') +
+                (dropdown ? ' dropdown-toggle' : '') +
+                '"' +
+                (dropdown ? ' data-toggle="dropdown"' : '') +
+                (title ? ' title="' + title + '"' : '') +
+                (event ? ' data-event="' + event + '"' : '') +
+                (value ? ' data-value=\'' + value + '\'' : '') +
+                (hide ? ' data-hide=\'' + hide + '\'' : '') +
+                ' tabindex="-1">' +
+                label +
+                (dropdown ? ' <span class="caret"></span>' : '') +
+                '</button>' +
+                (dropdown || '');
         };
 
         /**
@@ -4684,11 +4697,11 @@
          */
         var tplPopover = function (className, content) {
             return '<div class="' + className + ' popover bottom in" style="display: none;">' +
-            '<div class="arrow"></div>' +
-            '<div class="popover-content">' +
-            content +
-            '</div>' +
-            '</div>';
+                '<div class="arrow"></div>' +
+                '<div class="popover-content">' +
+                content +
+                '</div>' +
+                '</div>';
         };
 
         /**
@@ -4701,25 +4714,25 @@
          */
         var tplDialog = function (className, title, body, footer) {
             return '<div class="' + className + ' modal" aria-hidden="false">' +
-            '<div class="modal-dialog">' +
-            '<div class="modal-content">' +
-            (title ?
-            '<div class="modal-header">' +
-            '<button type="button" class="close" aria-hidden="true" tabindex="-1">&times;</button>' +
-            '<h4 class="modal-title">' + title + '</h4>' +
-            '</div>' : ''
-            ) +
-            '<form class="note-modal-form">' +
-            '<div class="modal-body">' +
-            '<div class="row-fluid">' + body + '</div>' +
-            '</div>' +
-            (footer ?
-            '<div class="modal-footer">' + footer + '</div>' : ''
-            ) +
-            '</form>' +
-            '</div>' +
-            '</div>' +
-            '</div>';
+                '<div class="modal-dialog">' +
+                '<div class="modal-content">' +
+                (title ?
+                '<div class="modal-header">' +
+                '<button type="button" class="close" aria-hidden="true" tabindex="-1">&times;</button>' +
+                '<h4 class="modal-title">' + title + '</h4>' +
+                '</div>' : ''
+                ) +
+                '<form class="note-modal-form">' +
+                '<div class="modal-body">' +
+                '<div class="row-fluid">' + body + '</div>' +
+                '</div>' +
+                (footer ?
+                '<div class="modal-footer">' + footer + '</div>' : ''
+                ) +
+                '</form>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
         };
 
         var tplButtonInfo = {
@@ -4768,11 +4781,11 @@
                 var items = options.styleTags.reduce(function (memo, v) {
                     var label = lang.style[v === 'p' ? 'normal' : v];
                     return memo + '<li><a data-event="formatBlock" href="#" data-value="' + v + '">' +
-                    (
-                        (v === 'p' || v === 'pre') ? label :
-                        '<' + v + '>' + label + '</' + v + '>'
-                    ) +
-                    '</a></li>';
+                        (
+                            (v === 'p' || v === 'pre') ? label :
+                            '<' + v + '>' + label + '</' + v + '>'
+                        ) +
+                        '</a></li>';
                 }, '');
 
                 return tplIconButton('fa fa-magic icon-magic', {
@@ -4784,8 +4797,8 @@
                 var items = options.fontNames.reduce(function (memo, v) {
                     if (!agent.isFontInstalled(v)) { return memo; }
                     return memo + '<li><a data-event="fontName" href="#" data-value="' + v + '">' +
-                    '<i class="fa fa-check icon-ok"></i> ' + v +
-                    '</a></li>';
+                        '<i class="fa fa-check icon-ok"></i> ' + v +
+                        '</a></li>';
                 }, '');
                 var label = '<span class="note-current-fontname">' +
                     options.defaultFontName +
@@ -4798,8 +4811,8 @@
             fontsize: function (lang, options) {
                 var items = options.fontSizes.reduce(function (memo, v) {
                     return memo + '<li><a data-event="fontSize" href="#" data-value="' + v + '">' +
-                    '<i class="fa fa-check icon-ok"></i> ' + v +
-                    '</a></li>';
+                        '<i class="fa fa-check icon-ok"></i> ' + v +
+                        '</a></li>';
                 }, '');
 
                 var label = '<span class="note-current-fontsize">11</span>';
@@ -4943,8 +4956,8 @@
             height: function (lang, options) {
                 var items = options.lineHeights.reduce(function (memo, v) {
                     return memo + '<li><a data-event="lineHeight" href="#" data-value="' + parseFloat(v) + '">' +
-                    '<i class="fa fa-check icon-ok"></i> ' + v +
-                    '</a></li>';
+                        '<i class="fa fa-check icon-ok"></i> ' + v +
+                        '</a></li>';
                 }, '');
 
                 return tplIconButton('fa fa-text-height icon-text-height', {
@@ -5048,29 +5061,26 @@
                     event: 'floatMe',
                     value: 'none'
                 });
-
-                /*
-                 var roundedButton = tplIconButton('fa fa-square icon-unchecked', {
-                 title: lang.image.shapeRounded,
-                 event: 'imageShape',
-                 value: 'img-rounded'
-                 });
-                 var circleButton = tplIconButton('fa fa-circle-o icon-circle-blank', {
-                 title: lang.image.shapeCircle,
-                 event: 'imageShape',
-                 value: 'img-circle'
-                 });
-                 var thumbnailButton = tplIconButton('fa fa-picture-o icon-picture', {
-                 title: lang.image.shapeThumbnail,
-                 event: 'imageShape',
-                 value: 'img-thumbnail'
-                 });
-                 var noneButton = tplIconButton('fa fa-times icon-times', {
-                 title: lang.image.shapeNone,
-                 event: 'imageShape',
-                 value: ''
-                 });
-                 */
+                var roundedButton = tplIconButton('fa fa-square icon-unchecked', {
+                    title: lang.image.shapeRounded,
+                    event: 'imageShape',
+                    value: 'img-rounded'
+                });
+                var circleButton = tplIconButton('fa fa-circle-o icon-circle-blank', {
+                    title: lang.image.shapeCircle,
+                    event: 'imageShape',
+                    value: 'img-circle'
+                });
+                var thumbnailButton = tplIconButton('fa fa-picture-o icon-picture', {
+                    title: lang.image.shapeThumbnail,
+                    event: 'imageShape',
+                    value: 'img-thumbnail'
+                });
+                var noneButton = tplIconButton('fa fa-times icon-times', {
+                    title: lang.image.shapeNone,
+                    event: 'imageShape',
+                    value: ''
+                });
 
                 var removeButton = tplIconButton('fa fa-trash-o icon-trash', {
                     title: lang.image.remove,
@@ -5080,7 +5090,7 @@
 
                 var content = '<div class="btn-group">' + autoButton + fullButton + halfButton + quarterButton + '</div>' +
                     '<div class="btn-group">' + leftButton + rightButton + justifyButton + '</div>' +
-                        //'<div class="btn-group">' + roundedButton + circleButton + thumbnailButton + noneButton + '</div>' +
+                    '<div class="btn-group">' + roundedButton + circleButton + thumbnailButton + noneButton + '</div>' +
                     '<div class="btn-group">' + removeButton + '</div>';
                 return tplPopover('note-image-popover', content);
             };
@@ -5100,23 +5110,23 @@
             };
 
             return '<div class="note-popover">' +
-            tplLinkPopover() +
-            tplImagePopover() +
-            (options.airMode ?  tplAirPopover() : '') +
-            '</div>';
+                tplLinkPopover() +
+                tplImagePopover() +
+                (options.airMode ?  tplAirPopover() : '') +
+                '</div>';
         };
 
         var tplHandles = function () {
             return '<div class="note-handle">' +
-            '<div class="note-control-selection">' +
-            '<div class="note-control-selection-bg"></div>' +
-            '<div class="note-control-holder note-control-nw"></div>' +
-            '<div class="note-control-holder note-control-ne"></div>' +
-            '<div class="note-control-holder note-control-sw"></div>' +
-            '<div class="note-control-sizing note-control-se"></div>' +
-            '<div class="note-control-selection-info"></div>' +
-            '</div>' +
-            '</div>';
+                '<div class="note-control-selection">' +
+                '<div class="note-control-selection-bg"></div>' +
+                '<div class="note-control-holder note-control-nw"></div>' +
+                '<div class="note-control-holder note-control-ne"></div>' +
+                '<div class="note-control-holder note-control-sw"></div>' +
+                '<div class="note-control-sizing note-control-se"></div>' +
+                '<div class="note-control-selection-info"></div>' +
+                '</div>' +
+                '</div>';
         };
 
         /**
@@ -5126,11 +5136,11 @@
          */
         var tplShortcut = function (title, body) {
             return '<table class="note-shortcut">' +
-            '<thead>' +
-            '<tr><th></th><th>' + title + '</th></tr>' +
-            '</thead>' +
-            '<tbody>' + body + '</tbody>' +
-            '</table>';
+                '<thead>' +
+                '<tr><th></th><th>' + title + '</th></tr>' +
+                '</thead>' +
+                '<tbody>' + body + '</tbody>' +
+                '</table>';
         };
 
         var tplShortcutText = function (lang) {
@@ -5275,20 +5285,20 @@
             };
 
             return '<div class="note-dialog">' +
-            tplMediaLibraryDialog() +
-            tplImageDialog() +
-            tplLinkDialog() +
-            tplVideoDialog() +
-            tplHelpDialog() +
-            '</div>';
+                tplMediaLibraryDialog() +
+                tplImageDialog() +
+                tplLinkDialog() +
+                tplVideoDialog() +
+                tplHelpDialog() +
+                '</div>';
         };
 
         var tplStatusbar = function () {
             return '<div class="note-resizebar">' +
-            '<div class="note-icon-bar"></div>' +
-            '<div class="note-icon-bar"></div>' +
-            '<div class="note-icon-bar"></div>' +
-            '</div>';
+                '<div class="note-icon-bar"></div>' +
+                '<div class="note-icon-bar"></div>' +
+                '<div class="note-icon-bar"></div>' +
+                '</div>';
         };
 
         var representShortcut = function (str) {
@@ -5606,7 +5616,7 @@
 
             return this;
         },
-        // 
+        //
 
         /**
          * get the HTML contents of note or set the HTML contents of note.
