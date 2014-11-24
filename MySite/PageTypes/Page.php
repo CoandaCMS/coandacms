@@ -2,70 +2,19 @@
 
 class Page extends \CoandaCMS\Coanda\Pages\PageType {
 
-    /**
-     * @return string
-     */
-    public function identifier()
-    {
-        return 'page';
-    }
+    protected $name = 'Page';
+    protected $schema = [
+        'name' => 'Name|textline|required|generates_slug',
+        'short_name' => 'Short name|textline',
+        'introduction' => 'Introduction|html',
+        'content' => 'Content|html',
+        'thumbnail_image' => 'Thumbnail Image|image',
+        'hide_sub_pages' => 'Hide sub pages|boolean'
+    ];
 
-    /**
-     * @return string
-     */
-    public function name()
-    {
-        return 'Page';
-    }
-
-    /**
-     * @return string
-     */
-    public function icon()
-    {
-        return 'fa-file-text';
-    }
-
-    /**
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'name' => [
-                'name' => 'Name',
-                'type' => 'textline',
-                'required' => true,
-                'generates_slug' => true
-            ],
-            'short_name' => [
-                'name' => 'Short name',
-                'type' => 'textline',
-                'required' => false
-            ],
-            'introduction' => [
-                'name' => 'Introduction',
-                'type' => 'html',
-                'required' => false
-            ],
-            'content' => [
-                'name' => 'Content',
-                'type' => 'html',
-                'required' => false
-            ],
-            'thumbnail_image' => [
-                'name' => 'Thumbnail Image',
-                'type' => 'image',
-                'required' => false
-            ],
-            'hide_sub_pages' => [
-                'name' => 'Hide sub pages',
-                'type' => 'boolean',
-                'default' => false,
-                'required' => false
-            ],
-        ];
-    }
+    protected $templates = [
+        'different_template' => 'A different template',
+    ];
 
     /**
      * @param $version
@@ -81,26 +30,5 @@ class Page extends \CoandaCMS\Coanda\Pages\PageType {
         }
 
         return $version->getAttributeByIdentifier('name')->typeData();
-    }
-
-    /**
-     * @return bool
-     */
-    public function canStaticCache()
-    {
-        return true;
-    }
-
-    /**
-     * @return array
-     */
-    public function availableTemplates()
-    {
-        return [
-            [
-                'identifier' => 'different_template',
-                'name' => 'A different template'
-            ],
-       ];
     }
 }
