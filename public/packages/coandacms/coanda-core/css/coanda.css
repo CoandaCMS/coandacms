@@ -78,6 +78,14 @@ h2
 	max-height: 1000px;
 }
 
+.navbar-brand.navbar-brand-logo {
+	padding: 5px 15px;
+}
+
+.navbar-brand-logo img {
+	max-height: 40px;
+}
+
 .btn,
 .dropdown-menu,
 .nav-pills > li > a,
@@ -138,12 +146,19 @@ h2
 
 .login
 {
-	margin-top: 20px;
+	margin-top: 0;
 }
 
 .login-header
 {
 	text-align: center;
+}
+
+.login-header img
+{
+	float: none;
+	margin: 0 auto 10px auto;
+	width: 100px;
 }
 
 .breadcrumb-nav
@@ -304,12 +319,17 @@ td.order-column .input-sm
 .trash-icon
 {
 	display: block;
-	padding: 8px 15px 0 0;
+	padding: 8px 15px 8px 0;
 }
 
 .trash-icon.disabled
 {
 	color: #ccc;
+}
+
+.trash-icon .badge
+{
+	background-color: #222;
 }
 
 .buttons
@@ -422,3 +442,4 @@ td table.table
 {
 	color: #626262;
 }
+
